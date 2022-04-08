@@ -1,0 +1,80 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<link href = "https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"   
+rel = "stylesheet" />  
+<script type = "text/javascript"   
+ src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>     <script type = "text/javascript">  
+
+Ext.onReady(function() {  
+
+	var states = Ext.create('Ext.data.Store', {
+		fields: ['abbr', 'name'],
+		data : [
+			{"abbr":"AL", "name":"Alabama"},
+			{"abbr":"AK", "name":"Alaska"},
+			{"abbr":"AZ", "name":"Arizona"}
+		]
+	});
+
+	Ext.create('Ext.Panel', {  
+	renderTo: 'helloWorldPanel',  
+	height: 500,  
+	width: 500,  
+	title: 'Hello world',  
+	html: '',
+	items: [
+			//https://docs.sencha.com/extjs/6.2.0/classic/Ext.html
+			{
+				xtype: 'textfield',
+				name: 'name',
+				fieldLabel: 'Name',
+				allowBlank: false  // requires a non-empty value
+			}, 
+		
+			{
+				xtype: 'textfield',
+				name: 'email',
+				fieldLabel: 'Email Address',
+				vtype: 'email'  // requires value to be a valid email address format
+			},
+		
+			{
+				xtype     : 'textareafield',
+				grow      : true,
+				name      : 'message',
+				fieldLabel: 'Message',
+				anchor    : '100%'
+			},
+		
+			Ext.create('Ext.form.ComboBox', {
+				fieldLabel: 'Choose State',
+				store: states,
+				queryMode: 'local',
+				valueField: 'abbr',
+				renderTo: Ext.getBody(),
+				tpl: Ext.create('Ext.XTemplate',
+					'<ul class="x-list-plain"><tpl for=".">',
+						'<li role="option" class="x-boundlist-item">{abbr} - {name}</li>',
+					'</tpl></ul>'
+				),
+				displayTpl: Ext.create('Ext.XTemplate',
+					'<tpl for=".">',
+						'{abbr} - {name}',
+					'</tpl>'
+				)
+			}),
+			{
+				xtype: 'button',
+				text : 'Insert'
+			}
+			
+		]
+	});  
+});  
+</script>  
+</head>    
+<body>  
+<div id = "helloWorldPanel" />  
+</body>  
+</html> 
