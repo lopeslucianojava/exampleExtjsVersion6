@@ -1,0 +1,163 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<link href = "https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"   
+rel = "stylesheet" />  
+<script type = "text/javascript"   
+ src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>     <script type = "text/javascript">  
+
+Ext.onReady(function() {  
+
+	Ext.create('Ext.data.Store', {
+    storeId:'employeeStore',
+    fields:['firstname', 'lastname', 'email'],
+    data:[
+        {firstname:"Michael", lastname:"Scott" ,  email:"scott@gmail.com"},
+        {firstname:"Dwight",  lastname:"Schrute", email:"schrute@gmail.com"},
+        {firstname:"Jim", 	  lastname:"Halpert", email:"halpert@gmail.com"},
+        {firstname:"Kevin",   lastname:"Malone",  email:"malone@gmail.com"},
+        {firstname:"Angela",  lastname:"Martin",  email:"martin@gmail.com"}
+		]
+	})
+	
+	var states = Ext.create('Ext.data.Store', {
+		fields: ['abbr', 'name'],
+		data : [
+			{"abbr":"AL", "name":"Alabama"},
+			{"abbr":"AK", "name":"Alaska"},
+			{"abbr":"AZ", "name":"Arizona"}
+		]
+	});
+
+	Ext.create('Ext.Panel', {  
+	renderTo: 'helloWorldPanel',  
+	height: 500,  
+	width: 500,  
+	title: 'Example Form and Grid',  
+	html: '',
+	items: [
+			//https://docs.sencha.com/extjs/6.2.0/classic/Ext.html
+			{
+				xtype: 'textfield',
+				name: 'name',
+				fieldLabel: 'First Name',
+				allowBlank: false  // requires a non-empty value
+			}, 
+		
+			{
+				xtype: 'textfield',
+				name: 'name',
+				fieldLabel: 'Last Name',
+				allowBlank: false  // requires a non-empty value
+			},
+		
+			{
+				xtype: 'textfield',
+				name: 'email',
+				fieldLabel: 'Email',
+				vtype: 'email'  // requires value to be a valid email address format
+			},
+		
+			{
+				xtype     : 'textareafield',
+				grow      : true,
+				name      : 'message',
+				fieldLabel: 'Message',
+				anchor    : '100%'
+			},
+		
+			{
+				xtype: 'datefield',
+				anchor: '100%',
+				fieldLabel: 'Birth date',
+				name: 'birthDate_date',
+				maxValue: new Date()  // limited to the current date or prior
+			}, 
+			
+			{
+            xtype      : 'fieldcontainer',
+            fieldLabel : 'Sex',
+            defaultType: 'radiofield',
+            defaults: {
+                flex: 1
+            },
+            layout: 'hbox',
+            items: [
+                {
+                    boxLabel  : 'M',
+                    name      : 'size',
+                    inputValue: 'm',
+                    id        : 'radio1'
+                }, {
+                    boxLabel  : 'F',
+                    name      : 'size',
+                    inputValue: 'f',
+                    id        : 'radio2'
+                }
+            ]
+        },
+    	
+			Ext.create('Ext.form.ComboBox', {
+				fieldLabel: 'Choose State',
+				store: states,
+				queryMode: 'local',
+				valueField: 'abbr',
+				renderTo: Ext.getBody(),
+				tpl: Ext.create('Ext.XTemplate',
+					'<ul class="x-list-plain"><tpl for=".">',
+						'<li role="option" class="x-boundlist-item">{abbr} - {name}</li>',
+					'</tpl></ul>'
+				),
+				displayTpl: Ext.create('Ext.XTemplate',
+					'<tpl for=".">',
+						'{abbr} - {name}',
+					'</tpl>'
+				)
+			}),
+			
+			{
+				xtype: 'button',
+				text : 'Insert'
+			},
+			
+			Ext.create('Ext.grid.Panel', {
+				title: 'Action Column Demo',
+				store: Ext.data.StoreManager.lookup('employeeStore'),
+				columns: [
+					{text: 'First Name',  dataIndex:'firstname'},
+					{text: 'Last Name',   dataIndex:'lastname'},
+					{text: 'Email',   	  dataIndex:'email'},
+					{
+						xtype:'actioncolumn',
+						width:50,
+						items: [{
+							iconCls: 'x-fa fa-cog',
+							tooltip: 'Edit',
+							handler: function(grid, rowIndex, colIndex) {
+								var rec = grid.getStore().getAt(rowIndex);
+								alert("Edit " + rec.get('firstname'));
+							}
+						},{
+							icon: 'extjs-build/examples/restful/images/delete.png',
+							tooltip: 'Delete',
+							handler: function(grid, rowIndex, colIndex) {
+								var rec = grid.getStore().getAt(rowIndex);
+								alert("Terminate " + rec.get('firstname'));
+							}
+						}]
+					}
+				],
+				width: 450,
+				renderTo: Ext.getBody()
+		   })
+			
+		]
+	});  
+}); 
+  
+</script>  
+</head>    
+<body>  
+<div id = "helloWorldPanel" />  
+</body>  
+</html> 
