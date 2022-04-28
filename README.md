@@ -1,2 +1,2 @@
 # exampleExtjsVersion6
-Example Extjs Version 6.0
+links: https://docs.sencha.com/
